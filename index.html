@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Struk BBM - Berdasarkan CASH</title>
+  <style>
+    body {
+      font-family: monospace;
+      max-width: 420px;
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #aaa;
+      background: #fdfdfd;
+    }
+    h2 {
+      text-align: center;
+    }
+    label {
+      margin-top: 12px;
+      display: block;
+    }
+    input {
+      width: 100%;
+      padding: 5px;
+      box-sizing: border-box;
+      margin-top: 4px;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      white-space: pre-wrap;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Struk Penjualan BBM</h2>
+
+  <label>Harga Non Subsidi (Rp/Liter):</label>
+  <input type="number" id="hargaNonSubsidi" value="10821">
+
+  <label>Subsidi Pemerintah (Rp/Liter):</label>
+  <input type="number" id="subsidi" value="4021">
+
+  <label>CASH Dibayar Konsumen (Rp):</label>
+  <input type="number" id="cash" value="250000">
+
+  <button onclick="hitung()">Hitung & Tampilkan Struk</button>
+
+  <pre id="output"></pre>
+
+  <script>
+    function formatRupiah(num) {
+      return "Rp. " + Number(num).toLocaleString("id-ID");
+    }
+
+    function hitung() {
+      const hargaNonSubsidi = parseFloat(document.getElementById("hargaNonSubsidi").value);
+      const subsidi = parseFloat(document.getElementById("subsidi").value);
+      const cash = parseFloat(document.getElementById("cash").value);
+
+      const hargaJual = hargaNonSubsidi - subsidi;
+
+      if (hargaJual <= 0) {
+        document.getElementById("output").innerText = "⚠️ Harga jual tidak valid. Harus lebih dari 0.";
+        return;
+      }
+
+      const volume = cash / hargaJual;
+      const totalTanpaSubsidi = Math.round(volume * hargaNonSubsidi);
+      const totalSubsidi = Math.round(volume * subsidi);
+      const totalKonsumenBayar = Math.round(volume * hargaJual);
+
+      const struk = `
+Volume: ${volume.toFixed(2)} liter
+
+Informasi Harga BBM (Rp/Liter)
+Harga Non Subsidi : ${formatRupiah(hargaNonSubsidi)}
+Subsidi Pemerintah: ${formatRupiah(subsidi)}
+Harga Jual        : ${formatRupiah(hargaJual)}
+
+Total Penjualan (Rp)
+Tanpa Subsidi     : ${formatRupiah(totalTanpaSubsidi)}
+Subsidi Pemerintah: ${formatRupiah(totalSubsidi)}
+Dibayar Konsumen  : ${formatRupiah(totalKonsumenBayar)}
+
+CASH              : ${formatRupiah(cash)}
+Semua kalkulasi berdasarkan CASH
+      `;
+
+      document.getElementById("output").innerText = struk.trim();
+    }
+
+    window.onload = hitung;
+  </script>
+</body>
+</html>
