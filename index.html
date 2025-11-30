@@ -1,104 +1,226 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Struk BBM - Berdasarkan CASH</title>
-  <style>
-    body {
-      font-family: monospace;
-      max-width: 420px;
-      margin: 20px auto;
-      padding: 20px;
-      border: 1px solid #aaa;
-      background: #fdfdfd;
-    }
-    h2 {
-      text-align: center;
-    }
-    label {
-      margin-top: 12px;
-      display: block;
-    }
-    input {
-      width: 100%;
-      padding: 5px;
-      box-sizing: border-box;
-      margin-top: 4px;
-    }
-    button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 10px;
-    }
-    pre {
-      background: #f4f4f4;
-      padding: 15px;
-      white-space: pre-wrap;
-      margin-top: 20px;
-      font-size: 14px;
-    }
-  </style>
-</head>
-<body>
-  <h2>Struk Penjualan BBM</h2>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Struk Penjualan BBM Modern</title>
 
-  <label>Harga Non Subsidi (Rp/Liter):</label>
-  <input type="number" id="hargaNonSubsidi" value="10821">
+        <!-- Font Inter -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
 
-  <label>Subsidi Pemerintah (Rp/Liter):</label>
-  <input type="number" id="subsidi" value="4021">
+        <!-- External CSS -->
+        <link rel="stylesheet" href="style.css" />
 
-  <label>CASH Dibayar Konsumen (Rp):</label>
-  <input type="number" id="cash" value="250000">
+        <!-- Tailwind CSS CDN -->
+        <script src="https://cdn.tailwindcss.com"></script>
 
-  <button onclick="hitung()">Hitung & Tampilkan Struk</button>
+        <!-- Konfigurasi Tailwind -->
+        <script>
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            sans: ["Inter", "sans-serif"],
+                            mono: [
+                                "ui-monospace",
+                                "SFMono-Regular",
+                                "Menlo",
+                                "Monaco",
+                                "Consolas",
+                                "monospace",
+                            ],
+                        },
+                        colors: {
+                            border: "hsl(var(--border))",
+                            input: "hsl(var(--input))",
+                            ring: "hsl(var(--ring))",
+                            background: "hsl(var(--background))",
+                            foreground: "hsl(var(--foreground))",
+                            primary: {
+                                DEFAULT: "hsl(var(--primary))",
+                                foreground: "hsl(var(--primary-foreground))",
+                            },
+                            muted: {
+                                DEFAULT: "hsl(var(--muted))",
+                                foreground: "hsl(var(--muted-foreground))",
+                            },
+                            card: {
+                                DEFAULT: "hsl(var(--card))",
+                                foreground: "hsl(var(--card-foreground))",
+                            },
+                        },
+                    },
+                },
+            };
+        </script>
+    </head>
+    <!-- UPDATE: Menambahkan flex-col dan gap-6 agar footer tersusun rapi di bawah card -->
+    <body
+        class="min-h-screen flex flex-col items-center justify-center p-4 bg-background text-foreground antialiased font-sans gap-6"
+    >
+        <!-- Card Container -->
+        <div
+            class="w-full max-w-md bg-card text-card-foreground rounded-xl border border-border shadow-sm overflow-hidden relative"
+        >
+            <!-- Tombol Toggle Dark Mode -->
+            <button
+                id="themeToggle"
+                class="absolute top-6 right-6 p-2 rounded-full hover:bg-muted transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            >
+                <svg
+                    id="iconSun"
+                    class="h-5 w-5 hidden"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                    />
+                </svg>
+                <svg
+                    id="iconMoon"
+                    class="h-5 w-5 hidden"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                    />
+                </svg>
+            </button>
 
-  <pre id="output"></pre>
+            <!-- Header -->
+            <div class="flex flex-col space-y-1.5 p-6 pb-2 pr-16">
+                <h3 class="font-semibold tracking-tight text-2xl">
+                    Kalkulator BBM
+                </h3>
+                <p class="text-sm text-muted-foreground">
+                    Masukkan data harga dan pembayaran di bawah ini.
+                </p>
+            </div>
 
-  <script>
-    function formatRupiah(num) {
-      return "Rp. " + Number(num).toLocaleString("id-ID");
-    }
+            <!-- Indikator Loading -->
+            <div
+                id="statusData"
+                class="px-6 py-2 text-xs font-medium text-blue-600 dark:text-blue-400 flex items-center gap-2"
+            >
+                <svg
+                    class="animate-spin h-3 w-3 text-blue-600 dark:text-blue-400"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                >
+                    <circle
+                        class="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        stroke-width="4"
+                    ></circle>
+                    <path
+                        class="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                </svg>
+                Memuat database nama...
+            </div>
 
-    function hitung() {
-      const hargaNonSubsidi = parseFloat(document.getElementById("hargaNonSubsidi").value);
-      const subsidi = parseFloat(document.getElementById("subsidi").value);
-      const cash = parseFloat(document.getElementById("cash").value);
+            <!-- Form Input -->
+            <div class="p-6 pt-2 space-y-4">
+                <div class="space-y-2">
+                    <label
+                        class="text-sm font-medium leading-none"
+                        for="hargaNonSubsidi"
+                    >
+                        Harga Non Subsidi (Rp/Liter)
+                    </label>
+                    <input
+                        type="number"
+                        id="hargaNonSubsidi"
+                        value="10821"
+                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 text-foreground"
+                    />
+                </div>
 
-      const hargaJual = hargaNonSubsidi - subsidi;
+                <div class="space-y-2">
+                    <label
+                        class="text-sm font-medium leading-none"
+                        for="subsidiPemerintah"
+                    >
+                        Subsidi Pemerintah (Rp/Liter)
+                    </label>
+                    <input
+                        type="number"
+                        id="subsidiPemerintah"
+                        value="4021"
+                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 text-foreground"
+                    />
+                </div>
 
-      if (hargaJual <= 0) {
-        document.getElementById("output").innerText = "⚠️ Harga jual tidak valid. Harus lebih dari 0.";
-        return;
-      }
+                <div class="space-y-2">
+                    <label class="text-sm font-medium leading-none" for="cash">
+                        CASH Dibayar Konsumen (Rp)
+                    </label>
+                    <input
+                        type="number"
+                        id="cash"
+                        value="250000"
+                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 text-foreground"
+                    />
+                </div>
 
-      const volume = cash / hargaJual;
-      const totalTanpaSubsidi = Math.round(volume * hargaNonSubsidi);
-      const totalSubsidi = Math.round(volume * subsidi);
-      const totalKonsumenBayar = Math.round(volume * hargaJual);
+                <button
+                    id="btnHitung"
+                    disabled
+                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full mt-4"
+                >
+                    Hitung & Tampilkan Struk
+                </button>
+            </div>
 
-      const struk = `
-Volume: ${volume.toFixed(2)} liter
+            <!-- Output Struk -->
+            <div
+                id="strukOutput"
+                class="hidden border-t border-border bg-muted/20 p-6 animate-in"
+            >
+                <!-- Hasil Render JS -->
+            </div>
+        </div>
 
-Informasi Harga BBM (Rp/Liter)
-Harga Non Subsidi : ${formatRupiah(hargaNonSubsidi)}
-Subsidi Pemerintah: ${formatRupiah(subsidi)}
-Harga Jual        : ${formatRupiah(hargaJual)}
+        <!-- UPDATE: Bagian Footer -->
+        <footer
+            class="text-center text-sm text-muted-foreground animate-in fade-in slide-in-from-bottom-4 duration-700"
+        >
+            Made by
+            <a
+                href="https://z0r.my.id/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-medium hover:text-foreground transition-colors underline decoration-dotted underline-offset-4"
+            >
+                z0r
+            </a>
+        </footer>
 
-Total Penjualan (Rp)
-Tanpa Subsidi     : ${formatRupiah(totalTanpaSubsidi)}
-Subsidi Pemerintah: ${formatRupiah(totalSubsidi)}
-Dibayar Konsumen  : ${formatRupiah(totalKonsumenBayar)}
-
-CASH              : ${formatRupiah(cash)}
-Semua kalkulasi berdasarkan CASH
-      `;
-
-      document.getElementById("output").innerText = struk.trim();
-    }
-
-    window.onload = hitung;
-  </script>
-</body>
+        <!-- External JavaScript -->
+        <script src="script.js"></script>
+    </body>
 </html>
