@@ -1,68 +1,263 @@
-/* 1. Definisi Variabel Warna (Light Mode - Default) */
 :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.5rem;
+    --background: #ffffff;
+    --foreground: #09090b;
+    --card: #ffffff;
+    --card-foreground: #09090b;
+    --primary: #18181b;
+    --primary-foreground: #fafafa;
+    --muted: #f4f4f5;
+    --muted-foreground: #71717a;
+    --border: #e4e4e7;
+    --input: #e4e4e7;
+    --ring: #18181b;
 }
 
-/* 2. Definisi Variabel Warna (Dark Mode) */
 .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --background: #09090b;
+    --foreground: #fafafa;
+    --card: #09090b;
+    --card-foreground: #fafafa;
+    --muted: #27272a;
+    --muted-foreground: #a1a1aa;
+    --border: #27272a;
+    --input: #27272a;
+    --ring: #d4d4d8;
 }
 
-/* Transisi halus saat ganti tema */
-body,
-div,
-input,
-button,
-span,
-p {
+html {
+    color-scheme: light dark;
+}
+body {
     transition:
         background-color 0.3s ease,
-        border-color 0.3s ease,
         color 0.3s ease;
+    background-color: var(--background);
+    color: var(--foreground);
 }
 
-/* Animasi Fade In untuk Struk */
+/* INPUT STYLES */
+.label-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: block;
+    color: var(--foreground);
+}
+.input-field {
+    display: flex;
+    height: 2.5rem;
+    width: 100%;
+    border-radius: 0.375rem;
+    border: 1px solid var(--input);
+    background-color: var(--background);
+    color: var(--foreground);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+}
+.input-field:focus {
+    outline: none;
+    border-color: var(--ring);
+    box-shadow: 0 0 0 1px var(--ring);
+}
+select.input-field {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+}
+select.input-field option {
+    background-color: var(--background);
+    color: var(--foreground);
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: auto;
+    cursor: pointer;
+    filter: invert(0);
+}
+.dark input[type="number"]::-webkit-inner-spin-button,
+.dark input[type="number"]::-webkit-outer-spin-button {
+    filter: invert(1);
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    height: 2.75rem;
+    width: 100%;
+    margin-top: 1.5rem;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    border: none;
+    cursor: pointer;
+}
+.btn-primary:hover {
+    opacity: 0.9;
+}
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* --- KERTAS STRUK 58MM --- */
+.paper-58mm {
+    width: 58mm;
+    min-height: 100px;
+    background: white;
+    padding: 10px 15px;
+    margin: 0 auto;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    color: #000;
+    position: relative;
+}
+
+/* --- V2 STYLE --- */
+.font-sans-condensed {
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 11px;
+    line-height: 1.2;
+}
+
+/* --- V3 STYLE (THERMAL FIX) --- */
+.font-thermal {
+    font-family: "Inconsolata", monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: -0.1px;
+    line-height: 1.2;
+}
+
+.thermal-content {
+    transform: scaleX(0.8);
+    transform-origin: top left;
+    width: 125%;
+    margin-right: -25%;
+    position: relative; /* Penting untuk overlay texture */
+
+    /* 1. Warna Teks (Menggunakan opacity dari slider) */
+    color: rgba(0, 0, 0, var(--ink-opacity, 0.85));
+
+    /* 2. Blur Halus (Tinta lama biasanya agak menyebar/kabur) */
+    filter: blur(var(--text-blur, 0px));
+}
+
+/* NEW: TEXTURE NOISE (EFEK GERIPIS) */
+.thermal-texture {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 20;
+
+    /* Pola bintik-bintik putih halus */
+    background-image: radial-gradient(
+        rgba(255, 255, 255, 0.8) 1px,
+        transparent 0
+    );
+    background-size: 3px 3px; /* Jarak antar bintik */
+
+    /* Opacity bintik dikontrol slider (semakin pudar = semakin terlihat bintiknya) */
+    opacity: var(--noise-opacity, 0);
+}
+
+/* Garis pembatas ikut aturan warna/blur parent */
+.dashed-line-thin {
+    border-bottom: 1px dashed currentColor;
+    margin: 4px 0;
+    opacity: 1;
+}
+
+.thermal-content {
+    transform: scaleX(0.8);
+    transform-origin: top left;
+    width: 125%;
+    margin-right: -25%;
+
+    /* Menggunakan variable untuk transparansi hitam */
+    color: rgba(0, 0, 0, var(--ink-opacity, 0.8));
+}
+
+.dashed-line-black {
+    border-bottom: 1px dashed currentColor; /* Agar ikut pudar */
+    margin: 5px 0;
+    width: 100%;
+}
+.dashed-line-thin {
+    border-bottom: 1px dashed currentColor;
+    margin: 4px 0;
+    opacity: 1;
+}
+
+.grid-2-col {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* --- GRID SPESIFIK V2 (GARNES) --- */
+/* Font Roboto Condensed biasanya sedikit lebih lebar dari monospace */
+
+/* 1. Detail (Pulau/Pompa) */
+.grid-v2-details {
+    display: grid;
+    /* Label ~90px agar titik dua pas setelah 'Pulau/Pompa' */
+    grid-template-columns: 90px 5px 1fr;
+    align-items: start;
+}
+
+/* 2. Harga & Total (Harga Non Subsidi) */
+.grid-v2-price {
+    display: grid;
+    /* Label ~135px agar titik dua pas setelah 'Subsidi Pemerintah' */
+    grid-template-columns: 135px 5px 1fr;
+    align-items: start;
+}
+
+/* --- GRID SPESIFIK V3 (UPDATED REQUEST) --- */
+
+/* 1. Transaksi (Titik dua geser KIRI) */
+.grid-v3-trans {
+    display: grid;
+    /* Label 90px -> Titik dua lebih ke kiri */
+    grid-template-columns: 85px 4px 1fr;
+    white-space: nowrap;
+}
+
+/* 2. Harga (Titik dua geser KANAN untuk alignment 'M') */
+.grid-v3-price {
+    display: grid;
+    /* Label 105px */
+    grid-template-columns: 100px 4px 1fr;
+    white-space: nowrap;
+}
+
+/* 3. Total (Titik dua geser KANAN untuk alignment ')') */
+.grid-v3-total {
+    display: grid;
+    /* Label 105px */
+    grid-template-columns: 100px 4px 1fr;
+    white-space: nowrap;
+}
+
+.cash-top {
+    position: relative;
+    top: -0.75rem;
+}
+
+.cash-big {
+    position: relative;
+    top: 0.4rem;
+}
+
 .animate-in {
     animation: fadeIn 0.5s ease-out forwards;
 }
-
 @keyframes fadeIn {
     from {
         opacity: 0;

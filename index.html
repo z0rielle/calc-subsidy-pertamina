@@ -5,73 +5,48 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Kalkulator Subsidi BBM</title>
 
-        <!-- Font Inter -->
+        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@500;600;700&family=Inter:wght@400;600;700&family=Roboto+Condensed:wght@400;700&display=swap"
             rel="stylesheet"
         />
 
-        <!-- External CSS -->
         <link rel="stylesheet" href="style.css" />
-
-        <!-- Tailwind CSS CDN -->
         <script src="https://cdn.tailwindcss.com"></script>
-
-        <!-- Konfigurasi Tailwind -->
         <script>
             tailwind.config = {
                 darkMode: "class",
                 theme: {
                     extend: {
-                        fontFamily: {
-                            sans: ["Inter", "sans-serif"],
-                            mono: [
-                                "ui-monospace",
-                                "SFMono-Regular",
-                                "Menlo",
-                                "Monaco",
-                                "Consolas",
-                                "monospace",
-                            ],
-                        },
                         colors: {
-                            border: "hsl(var(--border))",
-                            input: "hsl(var(--input))",
-                            ring: "hsl(var(--ring))",
-                            background: "hsl(var(--background))",
-                            foreground: "hsl(var(--foreground))",
-                            primary: {
-                                DEFAULT: "hsl(var(--primary))",
-                                foreground: "hsl(var(--primary-foreground))",
-                            },
-                            muted: {
-                                DEFAULT: "hsl(var(--muted))",
-                                foreground: "hsl(var(--muted-foreground))",
-                            },
-                            card: {
-                                DEFAULT: "hsl(var(--card))",
-                                foreground: "hsl(var(--card-foreground))",
-                            },
+                            border: "var(--border)",
+                            input: "var(--input)",
+                            background: "var(--background)",
+                            foreground: "var(--foreground)",
+                            card: "var(--card)",
+                            "card-foreground": "var(--card-foreground)",
+                            primary: "var(--primary)",
+                            "primary-foreground": "var(--primary-foreground)",
+                            muted: "var(--muted)",
+                            "muted-foreground": "var(--muted-foreground)",
                         },
                     },
                 },
             };
         </script>
     </head>
-    <!-- UPDATE: Menambahkan flex-col dan gap-6 agar footer tersusun rapi di bawah card -->
     <body
         class="min-h-screen flex flex-col items-center justify-center p-4 bg-background text-foreground antialiased font-sans gap-6"
     >
-        <!-- Card Container -->
         <div
             class="w-full max-w-md bg-card text-card-foreground rounded-xl border border-border shadow-sm overflow-hidden relative"
         >
-            <!-- Tombol Toggle Dark Mode -->
+            <!-- Theme Toggle -->
             <button
                 id="themeToggle"
-                class="absolute top-6 right-6 p-2 rounded-full hover:bg-muted transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                class="absolute top-6 right-6 p-2 rounded-full hover:bg-muted transition-colors text-foreground z-50"
             >
                 <svg
                     id="iconSun"
@@ -105,122 +80,787 @@
                 </svg>
             </button>
 
-            <!-- Header -->
             <div class="flex flex-col space-y-1.5 p-6 pb-2 pr-16">
                 <h3 class="font-semibold tracking-tight text-2xl">
                     Kalkulator BBM
                 </h3>
                 <p class="text-sm text-muted-foreground">
-                    Masukkan data harga dan pembayaran di bawah ini.
+                    Sesuaikan input dengan struk.
                 </p>
             </div>
 
-            <!-- Indikator Loading -->
             <div
                 id="statusData"
                 class="px-6 py-2 text-xs font-medium text-blue-600 dark:text-blue-400 flex items-center gap-2"
             >
-                <svg
-                    class="animate-spin h-3 w-3 text-blue-600 dark:text-blue-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                >
-                    <circle
-                        class="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        stroke-width="4"
-                    ></circle>
-                    <path
-                        class="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                </svg>
-                Memuat database nama...
+                <span>Memuat database nama...</span>
             </div>
 
-            <!-- Form Input -->
+            <!-- FORM INPUT -->
             <div class="p-6 pt-2 space-y-4">
-                <div class="space-y-2">
-                    <label
-                        class="text-sm font-medium leading-none"
-                        for="hargaNonSubsidi"
-                    >
-                        Harga Non Subsidi (Rp/Liter)
-                    </label>
-                    <input
-                        type="number"
-                        id="hargaNonSubsidi"
-                        value="10821"
-                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 text-foreground"
-                    />
+                <div class="space-y-1">
+                    <label class="label-text">Pilih Model Struk</label>
+                    <div class="relative">
+                        <select
+                            id="templateSelect"
+                            class="input-field cursor-pointer"
+                        >
+                            <option value="v1">V1 - Modern (UI Web)</option>
+                            <option value="v2">
+                                V2 - Struk Clean (Garnes)
+                            </option>
+                            <option value="v3">
+                                V3 - Struk DotMatrix (Thermal)
+                            </option>
+                        </select>
+                    </div>
                 </div>
 
-                <div class="space-y-2">
-                    <label
-                        class="text-sm font-medium leading-none"
-                        for="subsidiPemerintah"
-                    >
-                        Subsidi Pemerintah (Rp/Liter)
-                    </label>
-                    <input
-                        type="number"
-                        id="subsidiPemerintah"
-                        value="4021"
-                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 text-foreground"
-                    />
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="label-text">Harga Non-Sub</label>
+                        <input
+                            type="number"
+                            id="hargaNonSubsidi"
+                            value="10821"
+                            class="input-field"
+                        />
+                    </div>
+                    <div class="space-y-1">
+                        <label class="label-text">Subsidi Gov</label>
+                        <input
+                            type="number"
+                            id="subsidiPemerintah"
+                            value="4021"
+                            class="input-field"
+                        />
+                    </div>
                 </div>
-
-                <div class="space-y-2">
-                    <label class="text-sm font-medium leading-none" for="cash">
-                        CASH Dibayar Konsumen (Rp)
-                    </label>
+                <div class="space-y-1">
+                    <label class="label-text">CASH Konsumen (Rp)</label>
                     <input
                         type="number"
                         id="cash"
                         value="250000"
-                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 text-foreground"
+                        class="input-field"
                     />
                 </div>
 
-                <button
-                    id="btnHitung"
-                    disabled
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full mt-4"
+                <!-- INPUT V2 -->
+                <div
+                    id="inputsV2"
+                    class="space-y-3 p-3 bg-muted/50 rounded-md border border-border hidden"
                 >
+                    <p
+                        class="text-xs font-bold uppercase text-muted-foreground mb-2"
+                    >
+                        Detail Struk V2
+                    </p>
+
+                    <!-- NEW: Slider Kualitas Tinta untuk V2 -->
+                    <div
+                        class="space-y-3 bg-background p-2 rounded border border-input mb-2"
+                    >
+                        <p
+                            class="text-[10px] uppercase font-bold text-muted-foreground"
+                        >
+                            Kualitas Tinta
+                        </p>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <span>Kepekatan</span
+                                ><span id="val_v2_ink">0.8</span>
+                            </div>
+                            <input
+                                type="range"
+                                id="v2_ink_opacity"
+                                min="0.2"
+                                max="1.0"
+                                step="0.05"
+                                value="0.8"
+                                class="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- NEW: Slider Ukuran Header -->
+                    <div
+                        class="space-y-3 bg-background p-2 rounded border border-input mb-2"
+                    >
+                        <p
+                            class="text-[10px] uppercase font-bold text-muted-foreground"
+                        >
+                            Ukuran Header
+                        </p>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <span>Ukuran Logo (px)</span
+                                ><span id="val_v2_logo_size">100</span>
+                            </div>
+                            <input
+                                type="range"
+                                id="v2_logo_size"
+                                min="50"
+                                max="200"
+                                value="100"
+                                class="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                            />
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <span>Font SPBU (px)</span
+                                ><span id="val_v2_spbu_size">22</span>
+                            </div>
+                            <input
+                                type="range"
+                                id="v2_spbu_font_size"
+                                min="14"
+                                max="40"
+                                value="22"
+                                class="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Input SPBU & Waktu (Updated) -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="space-y-1">
+                            <label class="label-text">Kode SPBU</label>
+                            <input
+                                type="text"
+                                id="v2_spbuInput"
+                                value="3414404"
+                                class="input-field font-bold"
+                            />
+                        </div>
+                        <div class="space-y-1">
+                            <!-- UPDATE: Placeholder Lengkap -->
+                            <label class="label-text"
+                                >Waktu (dd-mm-yyyy hh:mm:ss)</label
+                            >
+                            <input
+                                type="text"
+                                id="v2_waktuInput"
+                                placeholder="Kosong = Auto"
+                                class="input-field"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="label-text"
+                            >Alamat (Enter untuk baris baru)</label
+                        >
+                        <textarea
+                            id="v2_alamatInput"
+                            class="input-field h-16 py-2 leading-tight"
+                            style="resize: none"
+                        >
+SPBU RAYA KAPUK KAMAL&#10;JL. RAYA KAPUK KAMAL</textarea
+                        >
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="space-y-1">
+                            <label class="label-text"
+                                >No. Trans (Auto 6-7 digit)</label
+                            >
+                            <input
+                                type="text"
+                                id="v2_transInput"
+                                placeholder="Auto"
+                                class="input-field"
+                            />
+                        </div>
+                        <div class="space-y-1">
+                            <label class="label-text">Operator</label>
+                            <input
+                                type="text"
+                                id="v2_operatorInput"
+                                placeholder="Auto / Nama"
+                                class="input-field uppercase"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="label-text">Pompa</label>
+                        <input
+                            type="number"
+                            id="v2_pompaInput"
+                            value="2"
+                            class="input-field"
+                        />
+                    </div>
+                </div>
+
+                <!-- INPUT V3 -->
+                <div
+                    id="inputsV3"
+                    class="space-y-3 p-3 bg-muted/50 rounded-md border border-border hidden"
+                >
+                    <p
+                        class="text-xs font-bold uppercase text-muted-foreground mb-2"
+                    >
+                        Detail Struk V3
+                    </p>
+
+                    <!-- Toggle Alignment -->
+                    <div
+                        class="flex items-center space-x-2 bg-background p-2 rounded border border-input mb-2"
+                    >
+                        <input
+                            type="checkbox"
+                            id="v3_centerHeader"
+                            class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+                        />
+                        <label
+                            for="v3_centerHeader"
+                            class="label-text mb-0 cursor-pointer select-none"
+                            >Tengah-kan Header SPBU</label
+                        >
+                    </div>
+
+                    <!-- Slider Density -->
+                    <div
+                        class="space-y-3 bg-background p-2 rounded border border-input mb-2"
+                    >
+                        <p
+                            class="text-[10px] uppercase font-bold text-muted-foreground"
+                        >
+                            Kerapatan Text (Line Height)
+                        </p>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <span>Header</span
+                                ><span id="val_lh_header">1.2</span>
+                            </div>
+                            <input
+                                type="range"
+                                id="lh_header"
+                                min="0.8"
+                                max="2.0"
+                                step="0.05"
+                                value="1.2"
+                                class="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                            />
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <span>Body</span
+                                ><span id="val_lh_body">1.2</span>
+                            </div>
+                            <input
+                                type="range"
+                                id="lh_body"
+                                min="0.8"
+                                max="2.0"
+                                step="0.05"
+                                value="1.2"
+                                class="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                            />
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <span>Footer</span
+                                ><span id="val_lh_footer">1.2</span>
+                            </div>
+                            <input
+                                type="range"
+                                id="lh_footer"
+                                min="0.8"
+                                max="2.0"
+                                step="0.05"
+                                value="1.2"
+                                class="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                            />
+                        </div>
+                    </div>
+
+                    <div
+                        class="space-y-3 bg-background p-2 rounded border border-input mb-2"
+                    >
+                        <p
+                            class="text-[10px] uppercase font-bold text-muted-foreground"
+                        >
+                            Kualitas Tinta (Efek Pudar)
+                        </p>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1">
+                                <span>Kepekatan</span>
+                                <span id="val_ink_opacity">0.8</span>
+                            </div>
+                            <!-- Range 0.1 (Sangat Pudar) s/d 1.0 (Hitam Pekat) -->
+                            <input
+                                type="range"
+                                id="ink_opacity"
+                                min="0.2"
+                                max="1.0"
+                                step="0.05"
+                                value="0.8"
+                                class="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Input SPBU & Waktu -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="space-y-1">
+                            <label class="label-text">Kode SPBU</label>
+                            <input
+                                type="text"
+                                id="v3_spbuInput"
+                                value="34.14407"
+                                class="input-field"
+                            />
+                        </div>
+                        <div class="space-y-1">
+                            <label class="label-text"
+                                >Waktu (Kosongkan = Auto)</label
+                            >
+                            <input
+                                type="text"
+                                id="v3_waktuInput"
+                                placeholder="dd-mm-yyyy hh:mm:ss"
+                                class="input-field"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Input Alamat (Textarea) -->
+                    <div class="space-y-1">
+                        <label class="label-text"
+                            >Alamat (Enter untuk baris baru)</label
+                        >
+                        <textarea
+                            id="v3_alamatInput"
+                            class="input-field h-20 py-2 leading-tight"
+                            style="resize: none"
+                        >
+JL. JEMBATAN TIGA&#10;PENJARINGAN - JAKARTA UTARA&#10;TELP.(021) 6628099</textarea
+                        >
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="space-y-1">
+                            <label class="label-text">Kode Transaksi</label>
+                            <input
+                                type="text"
+                                id="v3_transInput"
+                                placeholder="Auto Generate"
+                                class="input-field uppercase"
+                            />
+                        </div>
+                        <div class="space-y-1">
+                            <label class="label-text">Nama Petugas</label>
+                            <input
+                                type="text"
+                                id="v3_petugasInput"
+                                placeholder="Auto / Ketik Nama"
+                                class="input-field uppercase"
+                            />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="space-y-1">
+                            <label class="label-text">Nama Produk</label>
+                            <input
+                                type="text"
+                                id="v3_produkInput"
+                                value="BIO SOLAR Pompa 27.1"
+                                class="input-field"
+                            />
+                        </div>
+                        <div class="space-y-1">
+                            <label class="label-text">Odoo Meter</label>
+                            <input
+                                type="text"
+                                id="v3_odooInput"
+                                value="1"
+                                class="input-field"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="label-text">Nomor Plat</label>
+                    <input
+                        type="text"
+                        id="platNomor"
+                        value="B 9710 BXS"
+                        class="input-field uppercase"
+                    />
+                </div>
+
+                <button id="btnHitung" disabled class="btn-primary">
                     Hitung & Tampilkan Struk
                 </button>
             </div>
 
-            <!-- Output Struk -->
+            <!-- AREA OUTPUT -->
             <div
-                id="strukOutput"
-                class="hidden border-t border-border bg-muted/20 p-6 animate-in"
+                id="outputContainer"
+                class="hidden border-t border-border bg-gray-200 dark:bg-gray-800 p-8 flex justify-center animate-in min-h-[400px]"
             >
-                <!-- Hasil Render JS -->
+                <!-- V1 -->
+                <div
+                    id="strukV1"
+                    class="hidden w-[300px] font-mono text-xs sm:text-sm text-black bg-white p-4 border border-gray-300 rounded shadow-md"
+                >
+                    <!-- (Konten V1 Tetap) -->
+                    <div
+                        class="text-center border-b border-dashed border-gray-400 pb-3 mb-3"
+                    >
+                        <h2 class="font-bold text-lg">STRUK BBM</h2>
+                        <p id="v1_waktu" class="text-gray-500"></p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-500">Pelanggan</span>
+                        <span
+                            id="v1_pelanggan"
+                            class="font-bold uppercase text-right w-1/2 break-words"
+                        ></span>
+                    </div>
+                    <div class="flex justify-between mt-1">
+                        <span class="text-gray-500">Plat Nomor</span>
+                        <span id="v1_plat" class="font-bold uppercase"></span>
+                    </div>
+                    <div class="flex justify-between mt-2">
+                        <span class="text-gray-500">Volume</span>
+                        <span class="font-medium"
+                            ><span id="v1_volume"></span> Liter</span
+                        >
+                    </div>
+                    <div
+                        class="border-t border-dashed border-gray-400 my-2"
+                    ></div>
+                    <div class="space-y-1">
+                        <p class="font-bold mb-1">Rincian Harga (Rp/L)</p>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Non Subsidi</span
+                            ><span id="v1_hNon"></span>
+                        </div>
+                        <div class="flex justify-between text-green-700">
+                            <span>Subsidi Pemerintah</span
+                            ><span id="v1_hSub"></span>
+                        </div>
+                        <div class="flex justify-between font-semibold mt-1">
+                            <span>Harga Jual</span><span id="v1_hJual"></span>
+                        </div>
+                    </div>
+                    <div
+                        class="border-t border-dashed border-gray-400 my-2"
+                    ></div>
+                    <div class="space-y-1">
+                        <p class="font-bold mb-1">Total Penjualan</p>
+                        <div class="flex justify-between text-gray-500">
+                            <span>Tanpa Subsidi</span><span id="v1_tNon"></span>
+                        </div>
+                        <div class="flex justify-between text-gray-500">
+                            <span>Subsidi Gov</span><span id="v1_tSub"></span>
+                        </div>
+                        <div
+                            class="flex justify-between font-bold text-base mt-2 pt-2 border-t border-gray-200"
+                        >
+                            <span>DIBAYAR</span><span id="v1_tBayar"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- V2 -->
+                <div
+                    id="strukV2"
+                    class="paper-58mm font-sans-condensed hidden text-black leading-tight relative"
+                >
+                    <!-- Wrapper untuk efek tinta V2 -->
+                    <div id="v2_content_wrapper" class="relative z-10">
+                        <!-- Header -->
+                        <div
+                            class="flex flex-col items-center text-center mb-2"
+                        >
+                            <img
+                                id="v2_logo_img"
+                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Pertamina_Logo.svg/960px-Pertamina_Logo.svg.png"
+                                alt="Pertamina"
+                                style="
+                                    width: 100px;
+                                    filter: grayscale(100%) brightness(0%);
+                                    margin-bottom: 5px;
+                                "
+                            />
+
+                            <h2
+                                class="text-[22px] font-bold my-1 tracking-wider"
+                                id="v2_spbu_display"
+                            >
+                                3414404
+                            </h2>
+                            <div
+                                id="v2_address_display"
+                                class="font-bold text-[11px] uppercase"
+                            ></div>
+                        </div>
+
+                        <!-- Info Transaksi -->
+                        <div
+                            class="flex justify-between font-bold text-[11px] mb-1"
+                        >
+                            <span>Shift: <span id="v2_shift"></span></span>
+                            <span>No. Trans: <span id="v2_trans"></span></span>
+                        </div>
+                        <div class="font-bold text-[11px] mb-2">
+                            Waktu: <span id="v2_waktu"></span>
+                        </div>
+
+                        <div class="dashed-line-black"></div>
+
+                        <!-- Detail Pompa -->
+                        <div class="grid-v2-details font-bold text-[11px] mb-2">
+                            <span>Pulau/Pompa</span> <span>:</span>
+                            <span id="v2_pompa"></span> <span>Operator</span>
+                            <span>:</span>
+                            <span id="v2_operator" class="uppercase"></span>
+                            <span>Jenis BBM</span> <span>:</span>
+                            <span>PERTALITE</span>
+                            <!-- Volume dengan titik -->
+                            <span>Volume</span> <span>:</span>
+                            <span><span id="v2_volume"></span> liter</span>
+                        </div>
+
+                        <div class="dashed-line-black"></div>
+
+                        <!-- Harga -->
+                        <p class="font-bold text-[11px] mb-1">
+                            Informasi Harga BBM (Rp/Liter)
+                        </p>
+                        <div class="grid-v2-price font-bold text-[11px] mb-2">
+                            <!-- Value diisi JS tanpa titik dua tambahan -->
+                            <span>Harga Non Subsidi</span> <span>:</span>
+                            <span id="v2_hNon"></span>
+                            <span>Subsidi Pemerintah</span><span>:</span>
+                            <span id="v2_hSub"></span> <span>Harga Jual</span>
+                            <span>:</span> <span id="v2_hJual"></span>
+                        </div>
+
+                        <div class="dashed-line-black"></div>
+
+                        <!-- Total -->
+                        <p class="font-bold text-[11px] mb-1">
+                            Total Penjualan (Rp)
+                        </p>
+                        <div class="grid-v2-price font-bold text-[11px] mb-2">
+                            <span>Tanpa Subsidi</span> <span>:</span>
+                            <span id="v2_tNon"></span>
+                            <span>Subsidi Pemerintah</span><span>:</span>
+                            <span id="v2_tSub"></span>
+                            <span>Dibayar Konsumen</span> <span>:</span>
+                            <span id="v2_tBayar"></span>
+                        </div>
+
+                        <div class="dashed-line-black"></div>
+
+                        <!-- CASH -->
+                        <div
+                            class="flex justify-between items-end font-bold text-[14px] mt-2 mb-2"
+                        >
+                            <span>CASH</span>
+                            <span><span id="v2_cashBig"></span></span>
+                        </div>
+
+                        <div class="dashed-line-black"></div>
+
+                        <div class="font-bold text-[11px] mb-2">
+                            No. Plat : <span id="v2_plat"></span>
+                        </div>
+
+                        <div class="dashed-line-black"></div>
+
+                        <!-- Footer -->
+                        <div
+                            class="text-center font-bold text-[10px] mt-2 space-y-1"
+                        >
+                            <p>
+                                Anda mendapat subsidi dari Pemerintah sebesar
+                                <span id="v2_msgSub"></span> (Perhitungan
+                                Subsidi Unaudited atau Estimasi). Gunakan BBM
+                                Subsidi secara bijak.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- V3: THERMAL DOT MATRIX (FIXED WITH SECTION CONTROL) -->
+                <div
+                    id="strukV3"
+                    class="paper-58mm font-thermal hidden text-black uppercase relative"
+                >
+                    <div class="thermal-content relative z-10">
+                        <!-- NEW: Texture Overlay untuk efek pudar bintik-bintik -->
+                        <div class="thermal-texture"></div>
+
+                        <!-- Header -->
+                        <div
+                            id="v3_sec_header"
+                            class="opacity-90 leading-tight mb-2 text-center"
+                            style="line-height: 1.2"
+                        >
+                            <!-- (Isi Header tetap sama...) -->
+                            <img
+                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Pertamina_Logo.svg/960px-Pertamina_Logo.svg.png"
+                                alt="Pertamina"
+                                class="mx-auto mb-1 opacity-20 grayscale"
+                                style="width: 75%"
+                            />
+                            <div id="v3_header_text" class="text-left">
+                                <div class="text-[14px]">SPBU 34.14407</div>
+                                <div class="mt-1">JL. JEMBATAN TIGA</div>
+                                <div>PENJARINGAN - JAKARTA UTARA</div>
+                                <div>TELP.(021) 6628099</div>
+                            </div>
+                        </div>
+
+                        <div class="dashed-line-thin"></div>
+                        <div class="text-center font-bold text-[larger]">
+                            STRUK-PENJUALAN
+                        </div>
+
+                        <!-- SECTION 2: BODY (TRANSAKSI, HARGA, TOTAL, CASH, PLAT) -->
+                        <div id="v3_sec_body" style="line-height: 1.2">
+                            <!-- Transaksi -->
+                            <div class="grid-v3-trans">
+                                <span>NO TRANSAKSI</span> <span>:</span>
+                                <span id="v3_trans"></span> <span>TANGGAL</span>
+                                <span>:</span> <span id="v3_waktu"></span>
+                                <span>PETUGAS</span> <span>:</span>
+                                <span id="v3_petugas"></span>
+                                <span>ODOO METER</span> <span>:</span>
+                                <span id="v3_odoo"></span> <span>PRODUK</span>
+                                <span>:</span>
+                                <span
+                                    id="v3_produk"
+                                    class="leading-tight"
+                                ></span>
+                                <span>PEMAKAIAN</span> <span>:</span>
+                                <span><span id="v3_volume"></span>L</span>
+                            </div>
+
+                            <div class="dashed-line-thin"></div>
+
+                            <!-- Harga -->
+                            <div class="mb-1">
+                                INFORMASI HARGA BBM (<span class="normal-case"
+                                    >Rp</span
+                                >/LITER)
+                            </div>
+                            <div class="grid-v3-price">
+                                <span>HARGA NON SUBSIDI</span> <span>:</span>
+                                <span
+                                    ><span class="normal-case">Rp.</span>
+                                    <span id="v3_hNon"></span
+                                ></span>
+                                <span>SUBSIDI PEMERINTAH</span> <span>:</span>
+                                <span
+                                    ><span class="normal-case">Rp.</span>
+                                    <span id="v3_hSub"></span
+                                ></span>
+                                <span>HARGA JUAL</span> <span>:</span>
+                                <span
+                                    ><span class="normal-case">Rp.</span>
+                                    <span id="v3_hJual"></span
+                                ></span>
+                            </div>
+
+                            <div class="dashed-line-thin"></div>
+
+                            <!-- Total -->
+                            <div class="mb-1">
+                                TOTAL PENJUALAN (<span class="normal-case"
+                                    >Rp</span
+                                >)
+                            </div>
+                            <div class="grid-v3-total">
+                                <span>TANPA SUBSIDI</span> <span>:</span>
+                                <span
+                                    ><span class="normal-case">Rp.</span>
+                                    <span id="v3_tNon"></span
+                                ></span>
+                                <span>SUBSIDI PEMERINTAH</span> <span>:</span>
+                                <span
+                                    ><span class="normal-case">Rp.</span>
+                                    <span id="v3_tSub"></span
+                                ></span>
+                                <span>DIBAYAR KONSUMEN</span> <span>:</span>
+                                <span
+                                    ><span class="normal-case">Rp.</span>
+                                    <span id="v3_tBayar"></span
+                                ></span>
+                            </div>
+
+                            <div class="dashed-line-thin"></div>
+
+                            <!-- Cash -->
+                            <div class="flex justify-between items-end my-2">
+                                <span class="cash-top">CASH</span>
+                                <span class="text-[16px] font-bold cash-big"
+                                    ><span class="normal-case">Rp.</span>
+                                    <span id="v3_cashBig"></span
+                                ></span>
+                            </div>
+
+                            <div class="dashed-line-thin"></div>
+
+                            <!-- Plat -->
+                            <div class="my-1">
+                                NO PLAT :<span id="v3_plat"></span>
+                            </div>
+                        </div>
+
+                        <div class="dashed-line-thin"></div>
+
+                        <!-- SECTION 3: FOOTER (BARCODE & SUBSIDI & HIMBAUAN) -->
+                        <!-- Uniform font size for footer text -->
+                        <div
+                            id="v3_sec_footer"
+                            class="text-[11px]"
+                            style="line-height: 1.2"
+                        >
+                            <div
+                                id="v3_barcode"
+                                class="text-center text-[larger] font-bold"
+                            ></div>
+
+                            <div class="text-left">
+                                <div>ANDA MENDAPAT SUBSIDI DARI</div>
+                                <div>
+                                    PEMERINTAH SEBESAR
+                                    <span class="normal-case">Rp.</span>
+                                    <span id="v3_msgSub"></span>
+                                </div>
+                                <div>
+                                    (PERHITUNGAN SUBSIDI UNAUDITED ATAU
+                                    ESTIMASI).
+                                </div>
+                                <div class="text-center font-bold">
+                                    GUNAKAN BBM SUBSIDI SECARA BIJAK.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- UPDATE: Bagian Footer -->
-        <footer
-            class="text-center text-sm text-muted-foreground animate-in fade-in slide-in-from-bottom-4 duration-700"
-        >
+        <footer class="text-center text-sm text-muted-foreground">
             Made by
             <a
                 href="https://z0r.my.id/"
                 target="_blank"
-                rel="noopener noreferrer"
-                class="font-medium hover:text-foreground transition-colors underline decoration-dotted underline-offset-4"
+                class="font-medium hover:text-foreground underline decoration-dotted underline-offset-4"
+                >z0r</a
             >
-                z0r
-            </a>
         </footer>
 
-        <!-- External JavaScript -->
         <script src="script.js"></script>
     </body>
 </html>
